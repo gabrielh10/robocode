@@ -7,7 +7,7 @@ import java.awt.Color;
 /**
  * JC10 - a robot by (your name here)
  */
-public class JC10 extends Robot
+public class JC10 extends TeamRobot
 {
 	/**
 	 * run: JC10's default behavior
@@ -20,7 +20,7 @@ public class JC10 extends Robot
 		// After trying out your robot, try uncommenting the import at the top,
 		// and the next line:
 
-		setColors(Color.red, Color.white, Color.red); // body,gun,radar
+		setColors(Color.blue, Color.white, Color.red); // body,gun,radar
 		turnRight(360);
 		// Robot main loop
 		while(true) {
@@ -37,6 +37,12 @@ public class JC10 extends Robot
 	 * onScannedRobot: What to do when you see another robot
 	 */
 	public void onScannedRobot(ScannedRobotEvent e) {
+	
+		// Don't fire on teammates
+		if (isTeammate(e.getName())) {
+			return;
+		}
+		
 		this.hasTarget = true;
 		
 		double angle = e.getBearing();
