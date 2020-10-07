@@ -47,7 +47,7 @@ public class CRDroid extends TeamRobot implements Droid {
 			setTurnRight(normalRelativeAngleDegrees(theta - getHeading()));
 			//
 			double relativeDistance = Math.hypot(dy,dx);			
-			ahead(relativeDistance);
+			ahead(relativeDistance-10);
 
 			// Fire hard!
 			setFire(3);
