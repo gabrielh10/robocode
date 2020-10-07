@@ -45,12 +45,16 @@ public class TeamLeader extends TeamRobot {
 	 * onScannedRobot: What to do when you see another robot
 	 */
 	public void onScannedRobot(ScannedRobotEvent e) {
-
+		 String[] teammates = getTeammates();
+		 for (String name : teammates){
+			out.println(name); 
+		}
 		// Don't fire on teammates
-		if (isTeammate(e.getName())) {
+		if (isTeammate(e.getName()) || isMyTeammate(e.getName())) {
+			out.println("not atacking: "+e.getName());
 			return;
 		}
-		
+		out.println("atacking:"+e.getName());
 		double dist = e.getDistance();
 				
 	//criar condiçao para só atirar com hp maior que a metade (lider nao deve morrer)
@@ -78,7 +82,7 @@ public class TeamLeader extends TeamRobot {
 
 		setTurnGunRightRadians(gunTurn);
 		
-		if(getEnergy() > 60){
+		if(getEnergy() > 40 || getEnergy() >= e.getEnergy()){
 			if(dist >= 300){
 				fire(3);
 			} else if (dist > 100 && dist < 300) {
@@ -89,13 +93,13 @@ public class TeamLeader extends TeamRobot {
 		}
 		setTurnRadarRightRadians(radarTurn);	
 
-		out.println(enemyX);
-		out.println(enemyY);
+		//out.println(enemyX);
+		//out.println(enemyY);
 
 		try {
 			// Send enemy position to teammates
-			//broadcastMessage(new Point(enemyX, enemyY));
-			broadcastMessage('a');
+			broadcastMessage(new Point(enemyX, enemyY));
+			//broadcastMessage('a');
 		} catch (IOException ex) {
 			out.println("Unable to send order: ");
 			ex.printStackTrace(out);
@@ -127,4 +131,11 @@ public class TeamLeader extends TeamRobot {
 		setTurnLeft(90);
 		back(20);
 	}	
+	
+	public boolean isMyTeammate(String robotName){
+		if(robotName.contains("cin.CRDroid"))
+			return true;
+		else
+			return false;
+	}
 }

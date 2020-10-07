@@ -24,9 +24,9 @@ public class CRDroid extends TeamRobot implements Droid {
 
 		while(true) {
 			// Replace the next 4 lines with any behavior you would like
-			setAhead(20);
+			//setAhead(20);
 
-			setBack(20);
+			//setBack(20);
 			execute();
 		}
 	}
@@ -48,9 +48,13 @@ public class CRDroid extends TeamRobot implements Droid {
 			//
 			double relativeDistance = Math.hypot(dy,dx);			
 			ahead(relativeDistance-10);
-
+			
+			if(relativeDistance < 100)
+				setFire(3);
+			else
+				ahead(relativeDistance-10);
 			// Fire hard!
-			setFire(3);
+		
 		} // Set our colors
 	}	
 
@@ -62,6 +66,22 @@ public class CRDroid extends TeamRobot implements Droid {
 		back(10);
 	}
 	
+	public void onHitRobot(HitRobotEvent e) {
+		if(isTeammate(e.getName()) || isMyTeammate(e.getName())){
+			setBack(50);
+		} else {	
+			double absBearing = e.getBearing() + getHeading();
+			setTurnGunRight((absBearing - getGunHeading()) % 360);
+			setFire(3);
+		}
+	}
+	
+	public boolean isMyTeammate(String robotName){
+		if(robotName.contains("cin.CRDroid") || robotName.contains("cin.TeamLeader"))
+			return true;
+		else
+			return false;
+	}	
 	/**
 	 * onHitWall: What to do when you hit a wall
 	 */
