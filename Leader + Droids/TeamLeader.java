@@ -45,20 +45,15 @@ public class TeamLeader extends TeamRobot {
 	 * onScannedRobot: What to do when you see another robot
 	 */
 	public void onScannedRobot(ScannedRobotEvent e) {
-		 String[] teammates = getTeammates();
-		 for (String name : teammates){
-			out.println(name); 
-		}
 		// Don't fire on teammates
 		if (isTeammate(e.getName()) || isMyTeammate(e.getName())) {
-			out.println("not atacking: "+e.getName());
+			//out.println("not atacking: "+e.getName());
 			return;
 		}
-		out.println("atacking:"+e.getName());
+		//out.println("atacking:"+e.getName());
 		double dist = e.getDistance();
 				
-	//criar condiçao para só atirar com hp maior que a metade (lider nao deve morrer)
-		 double enemyBearing = getHeading() + e.getBearingRadians();
+		 double enemyBearing = getHeading() + e.getBearing();
 		 double angleToEnemy = getHeadingRadians() + e.getBearingRadians();
 
   		 double radarTurn = Utils.normalRelativeAngle( angleToEnemy - getRadarHeadingRadians() );
@@ -81,7 +76,7 @@ public class TeamLeader extends TeamRobot {
 		
 
 		setTurnGunRightRadians(gunTurn);
-		
+		//Don't fire if the energy is low or the enemy hasMore HP
 		if(getEnergy() > 40 || getEnergy() >= e.getEnergy()){
 			if(dist >= 300){
 				fire(3);
@@ -95,6 +90,7 @@ public class TeamLeader extends TeamRobot {
 
 		//out.println(enemyX);
 		//out.println(enemyY);
+		out.println(e.getName());
 
 		try {
 			// Send enemy position to teammates

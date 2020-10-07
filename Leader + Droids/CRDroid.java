@@ -19,16 +19,9 @@ public class CRDroid extends TeamRobot implements Droid {
 		setScanColor(Color.white);
         setBulletColor(Color.yellow);
 		
- 	 	setAdjustRadarForGunTurn(true);
-		setAdjustRadarForRobotTurn (true);
+ 	// 	setAdjustRadarForGunTurn(true);
+	//	setAdjustRadarForRobotTurn (true);
 
-		while(true) {
-			// Replace the next 4 lines with any behavior you would like
-			//setAhead(20);
-
-			//setBack(20);
-			execute();
-		}
 	}
 
 	public void onMessageReceived(MessageEvent e) {
@@ -47,15 +40,15 @@ public class CRDroid extends TeamRobot implements Droid {
 			setTurnRight(normalRelativeAngleDegrees(theta - getHeading()));
 			//
 			double relativeDistance = Math.hypot(dy,dx);			
+		
 			ahead(relativeDistance-10);
 			
 			if(relativeDistance < 100)
 				setFire(3);
 			else
-				ahead(relativeDistance-10);
-			// Fire hard!
+				ahead(relativeDistance-100);			
 		
-		} // Set our colors
+		}
 	}	
 
 	/**
