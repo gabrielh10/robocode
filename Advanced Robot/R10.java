@@ -8,7 +8,7 @@ import robocode.util.Utils;
 /**
  * R10 - a robot by (Gabriel, Júlia e Nico)
  */
-public class R10 extends AdvancedRobot
+public class R10 extends TeamRobot
 {
 	/**
 	 * run: R10's default behavior
@@ -49,6 +49,10 @@ public class R10 extends AdvancedRobot
 	 * onScannedRobot: What to do when you see another robot
 	 */
 	public void onScannedRobot(ScannedRobotEvent e) {
+	
+		if (isTeammate(e.getName())) {
+			return;
+		}
 	
 		 double dist = e.getDistance();
 	

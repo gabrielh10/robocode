@@ -47,7 +47,7 @@ public class JC10_SMA extends TeamRobot
 	public void onScannedRobot(ScannedRobotEvent e) {
 	
 		// Don't fire on teammates
-		if (isTeammate(e.getName())) {
+		if (isTeammate(e.getName()) || isMyTeammate(e.getName())) {
 			return;
 		}
 		  
@@ -128,4 +128,11 @@ public class JC10_SMA extends TeamRobot
 		back(20);
 		turnLeft(90);
 	}	
+	
+	public boolean isMyTeammate(String robotName){
+		if(robotName.contains("JC10_SMA"))
+			return true;
+		else
+			return false;
+	}
 }

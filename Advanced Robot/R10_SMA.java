@@ -2,6 +2,7 @@ package cin;
 import robocode.*;
 import java.awt.Color;
 import robocode.util.Utils;
+import java.io.IOException;
 
 // API help : https://robocode.sourceforge.io/docs/robocode/robocode/Robot.html
 
@@ -16,9 +17,9 @@ public class R10_SMA extends TeamRobot
 
 	public void run() {
 	
-		setColors(Color.yellow, Color.green, Color.blue); // body,gun,radar
-		setScanColor(Color.white);
-        setBulletColor(Color.yellow);
+		setColors(Color.green, Color.yellow, Color.blue); // body,gun,radar
+		setScanColor(Color.blue);
+        setBulletColor(Color.white);
 		
  	 	setAdjustRadarForGunTurn(true);
 		setAdjustRadarForRobotTurn (true);
@@ -47,7 +48,7 @@ public class R10_SMA extends TeamRobot
 	 * onScannedRobot: What to do when you see another robot
 	 */
 	public void onScannedRobot(ScannedRobotEvent e) {
-	
+		
 		// Don't fire on teammates
 		if (isTeammate(e.getName())) {
 			return;
@@ -81,7 +82,36 @@ public class R10_SMA extends TeamRobot
 		  }
 	
    		 setTurnRadarRightRadians(radarTurn);
+		 
+		double enemyX = getX() + e.getDistance() * Math.sin(angleToEnemy);
+		double enemyY = getY() + e.getDistance() * Math.cos(angleToEnemy);
+		
+		try {
+			// Send enemy position to teammates
+			broadcastMessage(new Point(enemyX, enemyY));
+		} catch (IOException ex) {
+			out.println("Unable to send order: ");
+			ex.printStackTrace(out);
+		}
 			
+	}
+	
+	public void onMessageReceived(MessageEvent e) {
+		// Fire at a point
+		if (e.getMessage() instanceof Point) {
+			Point p = (Point) e.getMessage();
+			// Calculate x and y to target
+			double dx = p.getX() - this.getX();
+			double dy = p.getY() - this.getY();
+			// Calculate angle to target
+			double theta = Math.toDegrees(Math.atan2(dx, dy));
+
+			// Turn gun to target
+			turnGunRight(Utils.normalRelativeAngleDegrees(theta - getGunHeading()));
+			// Fire hard!
+			fire(3);
+		} 
+
 	}
 
 	/**
